@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper    
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+    <mapper namespace="com.Dao.UserDao">
+
+    <resultMap id="loginResult" type="com.Pojo.User">
+            <result property="userName" column="userName"></result>
+            <result property="userPassword" column="userPassword"></result>
+            <result property="sex" column="sex"></result>
+            <association property="row" column="userPassword" select="row"></association>
+    </resultMap>
+    <select id="panduan" resultType="String" >
+        select * from  user  where userName=#{userName}
+    </select>
+
+    <select id="login" resultMap="loginResult">
+        select * from user where userName=#{userName} AND userPassword=#{userPassword}
+    </select>
+    <select id="row" resultType="Integer">
+        SELECT COUNT(*) FROM  user
+    </select>
+
+    <insert id="register" >
+        INSERT INTO  user(userName,userPassword,sex,userTx) VALUE (#{admin},#{passWord},#{sex},#{userTx})
+    </insert>
+
+    <update id="changeName">
+        UPDATE user SET userName=#{userName},sex=#{sex} WHERE userId=#{userId}
+    </update>
+    <select id="show" resultType="com.Pojo.User">
+        SELECT * FROM user WHERE userId=#{userId}
+    </select>
+    <update id="postChange">
+        UPDATE post SET userName=#{userName} WHERE userId=#{userId}
+    </update>
+    <update id="update">
+        UPDATE user SET userPassword=#{userPassword} WHERE userId=#{userId}
+    </update>
+    </mapper>

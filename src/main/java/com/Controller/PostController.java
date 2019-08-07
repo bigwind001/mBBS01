@@ -1,0 +1,58 @@
+package com.Controller;
+
+import com.Pojo.Post;
+import com.Service.PostService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpSession;
+import java.util.List;
+
+@Controller
+public class PostController {
+    @Autowired
+    PostService postService=null;
+
+    @ResponseBody
+    @RequestMapping("/mtop")
+    public List<Post> top(){
+        List<Post> topPost=postService.top();
+        return topPost;
+    }
+
+    @ResponseBody
+    @RequestMapping("/post")
+    public List<Post> post(){
+        List<Post> Post=postService.post();
+        return  Post;
+    }
+    @ResponseBody
+    @RequestMapping("/myView")
+    public List<Post> myPost(@RequestParam("userId") int userId){
+        List<Post> myPost=postService.myPost(userId);
+        return  myPost;
+    }
+
+    @ResponseBody
+    @RequestMapping("/tPost")
+    public Post show(@RequestParam("id") int id, HttpSession session){
+       Post showPost=  postService.showPost(id);
+        if (showPost.isTop()){
+            session.setAttribute("top","置顶");
+        }else {
+            session.setAttribute("top","未置顶");
+        }
+        return showPost;
+    }
+
+    @ResponseBody
+    @RequestMapping("/send")
+    public int send(@RequestParam("name") String userName,@RequestParam("Tx") String userTx,@RequestParam("vip") int userVip
+    ,@RequestParam("title") String postName,@RequestParam("content") String content,@RequestParam("userId") int userId ){
+        return  postService.send(userName, userTx, userVip, postName, content,userId);
+    }
+}

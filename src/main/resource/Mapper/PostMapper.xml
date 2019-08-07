@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        <mapper namespace="com.Dao.PostDao">
+
+                <resultMap id="topPost" type="com.Pojo.Post">
+                    <result property="userName" column="userName"></result>
+                    <result property="postName" column="postName"></result>
+                    <result property="userTx" column="userTx"></result>
+                    <result property="userVip" column="userVip"></result>
+                    <result property="time" column="time"></result>
+                    <result property="content" column="content"></result>
+                    <result property="top" column="top"></result>
+                    <result property="id" column="id"/>
+                    <association property="reply" column="{id=id}" select="reply">
+
+                    </association>
+                </resultMap>
+                <select id="top" resultMap="topPost">
+                    SELECT * FROM post WHERE top=1
+                </select>
+                <select id="reply" resultType="int">
+                    SELECT  COUNT(*) FROM reply WHERE id=#{id}
+                </select>
+                <select id="post" resultMap="topPost">
+                    SELECT * FROM post limit 6
+                </select>
+                <select id="myPost" resultType="com.Pojo.Post">
+                    SELECT * FROM post WHERE userId=#{userId}
+                </select>
+                <select id="showPost" resultMap="topPost">
+                    SELECT * FROM post WHERE id=#{id}
+                </select>
+                <insert id="send">
+                    INSERT INTO post(userName,userTx,userVip,postName,content,userId) VALUE (#{userName},#{userTx},#{userVip}
+                    ,#{postName},#{content},#{userId})
+                </insert>
+        </mapper>
