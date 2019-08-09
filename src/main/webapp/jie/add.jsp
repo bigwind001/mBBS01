@@ -16,7 +16,7 @@
 
 <div class="fly-header layui-bg-black">
   <div class="layui-container">
-    <a class="fly-logo" href="/">
+    <a class="fly-logo" href="../BBSnr.jsp">
       <img src="../../res/images/logo.png" alt="layui">
     </a>
     
@@ -36,7 +36,7 @@
           <dd><a href="../user/message.jsp"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
           <dd><a href="../user/home.html"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
           <hr style="margin: 5px 0;">
-          <dd><a href="" style="text-align: center;">退出</a></dd>
+          <dd><a href="" onclick="out()" style="text-align: center;">退出</a></dd>
         </dl>
       </li>
     </ul>
@@ -123,7 +123,7 @@ layui.config({
       var req={};
       req.name="${sessionScope.user.userName}";
       req.Tx="${sessionScope.user.userTx}";
-      req.vip=${sessionScope.user.userVip};
+      req.vip="${sessionScope.user.userVip}";
       req.userId="${sessionScope.user.userId}";
       req.title=$('#L_title').val().trim();
       req.content=$('#L_content').val().trim();
@@ -139,5 +139,19 @@ layui.config({
           }
       })
   }
+  function  out() {
+      $.ajax({
+          url:'/out',
+          dataType:"json",
+      })
+  }
+  $(function () {
+      var red={};
+      red.userName="${sessionScope.user.userName}";
+      if(red.userName==""){
+          alert("请先登陆");
+          window.location.href="../index.jsp";
+      }
+  })
 </script>
 </html>

@@ -27,8 +27,10 @@ public class UserController {
         User user=userService.login(name, password);
         if (i!=null){
             if(user!=null){
+                int shumu=userService.replySm(user.getUserId());
+                session.setAttribute("replySm",shumu);
                 session.setAttribute("user",user);
-                return "result.jsp";
+                return "BBSnr.jsp";
             }else{
                 return "Dresult.jsp";
             }
@@ -61,12 +63,17 @@ public class UserController {
         User user =userService.show(userId);
         session.setAttribute("user",user);
         userService.postChange(userId,userName);
+        userService.replyChange(userId,userName);
         return "BBSnr.jsp";
     }
-
     @ResponseBody
     @RequestMapping("/update")
     public int update(@RequestParam("userId") int id,@RequestParam("pass") String pass){
         return  userService.update(id,pass);
+    }
+    @RequestMapping("/out")
+    public String out(HttpSession session){
+        session.removeAttribute("user");
+        return"BBSnr.jsp";
     }
 }

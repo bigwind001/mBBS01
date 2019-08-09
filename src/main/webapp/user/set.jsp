@@ -16,7 +16,7 @@ pageEncoding="UTF-8"%>
 
 <div class="fly-header layui-bg-black">
   <div class="layui-container">
-    <a class="fly-logo" href="BBSnr.jsp">
+    <a class="fly-logo" href="../BBSnr.jsp">
       <img src="../../res/images/logo.png" alt="layui">
     </a>
     <!--<ul class="layui-nav fly-nav layui-hide-xs">-->
@@ -45,7 +45,7 @@ pageEncoding="UTF-8"%>
           <dd><a href="../user/message.jsp"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
           <dd><a href="../user/home.jsp"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
           <hr style="margin: 5px 0;">
-          <dd><a href="" style="text-align: center;">退出</a></dd>
+          <dd><a href="" onclick="out()" style="text-align: center;">退出</a></dd>
         </dl>
       </li>
     </ul>
@@ -123,16 +123,23 @@ pageEncoding="UTF-8"%>
 
           
           <div class="layui-form layui-form-pane layui-tab-item">
+            <form method="post"   action="/updateTx" enctype="multipart/form-data">
             <div class="layui-form-item">
               <div class="avatar-add">
                 <p>建议尺寸168*168，支持jpg、png、gif，最大不能超过50KB</p>
-                <button type="button" class="layui-btn upload-img">
-                  <i class="layui-icon">&#xe67c;</i>上传头像
-                </button>
-                <img src="../img/1.jpg">
+                <input type="file" name="file" class="layui-btn layui-icon" value="上传头像"/>
+                <%--<button type="button" class="layui-btn upload-img">--%>
+                  <%--<i class="layui-icon">&#xe67c;</i>上传头像--%>
+                <%--</button>--%>
+                <img src="../${sessionScope.user.userTx}">
                 <span class="loading"></span>
               </div>
             </div>
+              <div class="layui-form-item">
+                <input type='hidden'  id='Uid' name="userId" value ="${sessionScope.user.userId}"/>
+                <button type="submit"  class="layui-btn" lay-filter="*" >确认修改</button>
+              </div>
+            </form>
           </div>
           
           <div class="layui-form layui-form-pane layui-tab-item">
@@ -221,5 +228,19 @@ layui.config({
            location.replace(location.href);
       }
   }
+  function  out() {
+      $.ajax({
+          url:'/out',
+          dataType:"json",
+      })
+  }
+  $(function () {
+      var red={};
+      red.userName="${sessionScope.user.userName}";
+      if(red.userName==""){
+          window.location.href="../index.jsp";
+          alert("请先登陆");
+      }
+  })
 </script>
 </html>

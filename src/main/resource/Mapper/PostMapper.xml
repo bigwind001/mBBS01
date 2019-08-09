@@ -36,4 +36,13 @@
                     INSERT INTO post(userName,userTx,userVip,postName,content,userId) VALUE (#{userName},#{userTx},#{userVip}
                     ,#{postName},#{content},#{userId})
                 </insert>
+                <select id="list" resultType="com.Pojo.Post">
+                    SELECT * FROM post
+                </select>
+                <select id="rowbounds" resultType="com.Pojo.Post">
+                    SELECT * FROM post
+                </select>
+                <select id="nowReply" resultType="com.Pojo.Post">
+                    SELECT * FROM post WHERE userId=#{userId} limit 3
+                </select>
         </mapper>

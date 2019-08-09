@@ -5,6 +5,7 @@
 <head>
     <meta charset="utf-8">
     <title>用户主页</title>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="keywords" content="fly,layui,前端社区">
     <meta name="description" content="Fly社区是模块化前端UI框架Layui的官网社区，致力于为web开发提供强劲动力">
@@ -15,7 +16,7 @@
 
 <div class="fly-header layui-bg-black">
     <div class="layui-container">
-        <a class="fly-logo" href="/">
+        <a class="fly-logo" href="../BBSnr.jsp">
             <img src="../../res/images/logo.png" alt="layui">
         </a>
         <%--<ul class="layui-nav fly-nav layui-hide-xs">--%>
@@ -44,7 +45,7 @@
                     <dd><a href="../user/message.jsp"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
                     <dd><a href="../user/home.jsp"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
                     <hr style="margin: 5px 0;">
-                    <dd><a href="" style="text-align: center;">退出</a></dd>
+                    <dd><a href="" onclick=out() style="text-align: center;">退出</a></dd>
                 </dl>
             </li>
         </ul>
@@ -78,44 +79,9 @@
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md6 fly-home-jie">
             <div class="fly-panel">
-                <h3 class="fly-panel-title">贤心 最近的提问</h3>
-                <ul class="jie-row">
-                    <li>
-                        <span class="fly-jing">精</span>
-                        <a href="" class="jie-title"> 基于 layui 的极简社区页面模版</a>
-                        <i>刚刚</i>
-                        <em class="layui-hide-xs">1136阅/27答</em>
-                    </li>
-                    <li>
-                        <a href="" class="jie-title"> 基于 layui 的极简社区页面模版</a>
-                        <i>1天前</i>
-                        <em class="layui-hide-xs">1136阅/27答</em>
-                    </li>
-                    <li>
-                        <a href="" class="jie-title"> 基于 layui 的极简社区页面模版</a>
-                        <i>2017-10-30</i>
-                        <em class="layui-hide-xs">1136阅/27答</em>
-                    </li>
-                    <li>
-                        <a href="" class="jie-title"> 基于 layui 的极简社区页面模版</a>
-                        <i>1天前</i>
-                        <em class="layui-hide-xs">1136阅/27答</em>
-                    </li>
-                    <li>
-                        <a href="" class="jie-title"> 基于 layui 的极简社区页面模版</a>
-                        <i>1天前</i>
-                        <em class="layui-hide-xs">1136阅/27答</em>
-                    </li>
-                    <li>
-                        <a href="" class="jie-title"> 基于 layui 的极简社区页面模版</a>
-                        <i>1天前</i>
-                        <em class="layui-hide-xs">1136阅/27答</em>
-                    </li>
-                    <li>
-                        <a href="" class="jie-title"> 基于 layui 的极简社区页面模版</a>
-                        <i>1天前</i>
-                        <em class="layui-hide-xs">1136阅/27答</em>
-                    </li>
+                <h3 class="fly-panel-title">${sessionScope.user.userName} 最近的帖子</h3>
+                <ul id="post" class="jie-row">
+
                     <!-- <div class="fly-none" style="min-height: 50px; padding:30px 0; height:auto;"><i style="font-size:14px;">没有发表任何求解</i></div> -->
                 </ul>
             </div>
@@ -123,30 +89,8 @@
 
         <div class="layui-col-md6 fly-home-da">
             <div class="fly-panel">
-                <h3 class="fly-panel-title">贤心 最近的回答</h3>
-                <ul class="home-jieda">
-                    <li>
-                        <p>
-                            <span>1分钟前</span>
-                            在<a href="" target="_blank">tips能同时渲染多个吗?</a>中回答：
-                        </p>
-                        <div class="home-dacontent">
-                            尝试给layer.photos加上这个属性试试：
-                            <pre>
-full: true
-</pre>
-                            文档没有提及
-                        </div>
-                    </li>
-                    <li>
-                        <p>
-                            <span>5分钟前</span>
-                            在<a href="" target="_blank">在Fly社区用的是什么系统啊?</a>中回答：
-                        </p>
-                        <div class="home-dacontent">
-                            Fly社区采用的是NodeJS。分享出来的只是前端模版
-                        </div>
-                    </li>
+                <h3 class="fly-panel-title">${sessionScope.user.userName} 最近的回复</h3>
+                <ul id="reply" class="home-jieda">
 
                     <!-- <div class="fly-none" style="min-height: 50px; padding:30px 0; height:auto;"><span>没有回答任何问题</span></div> -->
                 </ul>
@@ -183,4 +127,72 @@ full: true
 </script>
 
 </body>
+<script>
+    var req={};
+    req.userId="${sessionScope.user.userId}";
+    req.userName="${sessionScope.user.userName}";
+    $(function () {
+        $.ajax({
+            data:req,
+            dataType:"json",
+            url:"/nowReply",
+            success:function (resp) {
+                var target=$("#post");
+                target.html("");
+                for(var row of resp){
+                    var str=
+                      "<li>"
+                            +"<a href='../jie/detail.jsp' onclick=post('"+row.id+"','"+row.postName+"','"+row.userId+"') class='jie-title'>"+row.postName+"</a>"
+                        +"<i>"+row.time+"</i>"
+                      +"</li>";
+                        target.append(str);
+                }
+            }
+        })
+    })
+    $(function () {
+        $.ajax({
+            data:req,
+            dataType:"json",
+            url:"/uReply",
+            success:function (resp) {
+                var target=$("#reply");
+                target.html("");
+                for(var row of resp){
+                    var str =
+                         "<li>"
+                            +"<p>"
+                            +"<span>"+row.time+"</span>"
+                            +"在<a href='' target='_blank'>"+row.postName+"</a>中回复:"
+                            +"</p>"
+                            +"<div class='home-dacontent'>"
+                            +row.reply
+                            +"</div>"
+                        +"</li>";
+                    target.append(str);
+                }
+            }
+        })
+
+    })
+    function post(id,postName,userId) {
+        sessionStorage.setItem("postId",id);
+        sessionStorage.setItem("postName",postName);
+        sessionStorage.setItem("userId",userId);
+    }
+    function  out() {
+        $.ajax({
+            url:'/out',
+            dataType:"json",
+        })
+    }
+    $(function () {
+        var red={};
+        red.userName="${sessionScope.user.userName}";
+        if(red.userName==""){
+            alert("请先登陆");
+            window.location.href="../index.jsp";
+        }
+    })
+</script>
 </html>

@@ -19,14 +19,21 @@ public class ReplyController {
     @ResponseBody
     @RequestMapping("/reply")
     public int reply(@RequestParam("id") int id,@RequestParam("name") String name,@RequestParam("Tx") String Tx
-    ,@RequestParam("vip") int vip,@RequestParam("content") String content){
-        return replyService.add(id, name, Tx, vip, content);
+    ,@RequestParam("vip") int vip,@RequestParam("content") String content,@RequestParam("postName") String postName
+    ,@RequestParam("userId") int userId){
+        return replyService.add(id, name, Tx, vip, content,postName,userId);
 
     }
     @ResponseBody
     @RequestMapping("/showReply")
     public List<Reply> reply(@RequestParam("id") int id){
         List<Reply> Reply=replyService.show(id);
+        return  Reply;
+    }
+    @ResponseBody
+    @RequestMapping("/uReply")
+    public List<Reply>nowReply(@RequestParam("userName") String userName){
+        List<Reply> Reply=replyService.nowReply(userName);
         return  Reply;
     }
 

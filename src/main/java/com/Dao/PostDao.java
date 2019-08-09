@@ -2,6 +2,7 @@ package com.Dao;
 
 import com.Pojo.Post;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -18,4 +19,7 @@ public interface PostDao {
             ,@Param("postName") String postName,@Param("content") String content
             ,@Param("userId") int userId
     );
+    List<Post> list();
+    List<Post> rowbounds(RowBounds rowBounds);
+    List<Post> nowReply(@Param("userId") int userId);
 }

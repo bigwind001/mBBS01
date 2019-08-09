@@ -17,11 +17,11 @@ pageEncoding="UTF-8"%>
 
 <div class="fly-header layui-bg-black">
   <div class="layui-container">
-    <a class="fly-logo" href="/">
+    <a class="fly-logo" href="../BBSnr.jsp">
       <img src="../../res/images/logo.png" alt="layui">
     </a>
     
-    <ul class="layui-nav fly-nav-user">
+    <ul  id="message" class="layui-nav fly-nav-user">
 
       <!-- 登入后的状态 -->
       <li class="layui-nav-item">
@@ -36,7 +36,7 @@ pageEncoding="UTF-8"%>
           <dd><a href="../user/message.jsp"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
           <dd><a href="../user/home.jsp"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
           <hr style="margin: 5px 0;">
-          <dd><a href="" style="text-align: center;">退出</a></dd>
+          <dd><a href="" onclick="out()" style="text-align: center;">退出</a></dd>
         </dl>
       </li>
     </ul>
@@ -56,10 +56,10 @@ pageEncoding="UTF-8"%>
       
       <div class="fly-column-right layui-hide-xs"> 
         <span class="fly-search"><i class="layui-icon"></i></span> 
-        <a href="add.html" class="layui-btn">发表新帖</a> 
+        <a href="add.jsp" class="layui-btn">发表新帖</a>
       </div> 
       <div class="layui-hide-sm layui-show-xs-block" style="margin-top: -10px; padding-bottom: 10px; text-align: center;"> 
-        <a href="add.html" class="layui-btn">发表新帖</a> 
+        <a href="add.jsp" class="layui-btn">发表新帖</a>
       </div> 
     </div>
   </div>
@@ -87,7 +87,7 @@ pageEncoding="UTF-8"%>
           <!-- <li class="fly-none">消灭零回复</li> -->
         </ul>
         
-        <div class="layui-form layui-form-pane">
+        <div id="replyhide" class="layui-form layui-form-pane">
 
           <form id="huitie">
             <div class="layui-form-item layui-form-text">
@@ -213,6 +213,9 @@ layui.config({
 <script>
     var req ={};
     req.id=sessionStorage.getItem("postId");
+    req.postName=sessionStorage.getItem("postName");
+    req.userId=sessionStorage.getItem("userId");
+    var top={};
       $(function () {
         $.ajax({
             data:req,
@@ -221,14 +224,18 @@ layui.config({
             dataType:'json',
             success:function (resp) {
                 var target=$("#tPost");
+                if(resp.top==1){
+                      top.value="置顶";
+                }else {
+                    top.value="未置顶";
+                }
                 target.html("");
-                var top="${sessionScope.top}";
                 // for(var row of resp){
                     var str =
                         "<h1>"+resp.postName+"</h1>"
                         +"<div class='fly-detail-info'>"
                         +"<span class='layui-badge layui-bg-green fly-detail-column'>动态</span>"
-                        +"<span class='layui-badge layui-bg-black'>"+top+"</span>"
+                        +"<span class='layui-badge layui-bg-black'>"+top.value+"</span>"
                         +"<div class='fly-admin-box' data-id='123'>"
                         +"<span class='layui-btn layui-btn-xs jie-admin' type='del'>删除</span>"
                         +"<span class='layui-btn layui-btn-xs jie-admin' type='set' field='stick' rank='1'>置顶</span>"
@@ -305,7 +312,9 @@ layui.config({
       })
       function Postreply() {
           var ree={};
+          ree.postName=req.postName;
           ree.id=req.id;
+          ree.userId=req.userId;
           ree.name="${sessionScope.user.userName}";
           ree.Tx="${sessionScope.user.userTx}";
           ree.vip="${sessionScope.user.userVip}";
@@ -322,5 +331,33 @@ layui.config({
               }
           })
       }
+    function  out() {
+        $.ajax({
+            url:'/out',
+            dataType:"json",
+        })
+    }
+    $(function () {
+        var red={};
+        red.userName="${sessionScope.user.userName}";
+        var target=$("#message");
+        var target2=$("#replyhide");
+        if(red.userName==""){
+            target.html("");
+            target2.html("");
+            var ste=
+                "<li class='layui-nav-item'>"
+                +"<a class='iconfont icon-touxiang layui-hide-xs'href='../login.jsp'></a>"
+                +"</li>"
+                +"<li class='layui-nav-item'>"
+                +"<a href='../login.jsp'>登入</a>"
+                +"</li>"
+                +"<li class='layui-nav-item'>"
+                +"<a href='../register.jsp'>注册</a>"
+                +"</li>";
+            target.append(ste);
+            target2.hide();
+        }
+    })
 </script>
 </html>

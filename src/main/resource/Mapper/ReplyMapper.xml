@@ -4,10 +4,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
             <mapper namespace="com.Dao.ReplyDao">
                 <insert id="add" >
-                    INSERT  INTO reply(userName,userTx,userVip,reply,id) VALUE (#{userName},#{userTx},#{userVip},
-                    #{reply},#{id})
+                    INSERT  INTO reply(userName,userTx,userVip,reply,id,postName,userId) VALUE (#{userName},#{userTx},#{userVip},
+                    #{reply},#{id},#{postName},#{userId})
                 </insert>
                 <select id="show" resultType="com.Pojo.Reply">
                     SELECT * FROM reply WHERE id=#{id}
+                </select>
+                <select id="nowReply" resultType="com.Pojo.Reply">
+                    SELECT * FROM reply WHERE userName=#{userName} ORDER BY time DESC limit 3
                 </select>
             </mapper>

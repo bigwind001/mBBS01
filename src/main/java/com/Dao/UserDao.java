@@ -15,4 +15,7 @@ public interface UserDao {
     User show(@Param("userId") int userId);
     int postChange(@Param("userId") int userId,@Param("userName") String userName);
     int update(@Param("userId") int userId,@Param("userPassword") String pass);
+    int replySm(@Param("userId") int userId);
+    int replyChange(@Param("userId") int userId,@Param("userName") String userName);
+
 }

@@ -17,11 +17,11 @@ pageEncoding="UTF-8"%>
 
 <div class="fly-header layui-bg-black">
   <div class="layui-container">
-    <a class="fly-logo" href="/">
+    <a class="fly-logo" href="/BBSnr.jsp">
       <img src="../res/images/logo.png" alt="layui">
     </a>
 
-    <ul class="layui-nav fly-nav-user">
+    <ul id="message" class="layui-nav fly-nav-user">
 
       <li class="layui-nav-item">
         <a class="fly-nav-avatar" href="javascript:;">
@@ -35,7 +35,7 @@ pageEncoding="UTF-8"%>
           <dd><a href="user/message.jsp"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
           <dd><a href="user/home.jsp"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
           <hr style="margin: 5px 0;">
-          <dd><a href="/user/logout/" style="text-align: center;">退出</a></dd>
+          <dd><a href="" onclick=out() style="text-align: center;">退出</a></dd>
         </dl>
       </li>
 
@@ -276,7 +276,7 @@ pageEncoding="UTF-8"%>
                         +"<a href='user/home.jsp' class='fly-avatar'>"
                         +"<img src='"+row.userTx+"' >"
                         +"</a>"
-                        +"<h2><a class='layui-badge'>动态</a> <a href='jie/detail.jsp' onclick=post('"+row.id+"')>"+row.postName+"</a></h2>"
+                        +"<h2><a class='layui-badge'>动态</a> <a href='jie/detail.jsp' onclick=post('"+row.id+"','"+row.postName+"','"+row.userId+"')>"+row.postName+"</a></h2>"
                         +"<div class='fly-list-info'>"
                         +"<a href='user/home.jsp' link>"
                         +"<cite>"+row.userName+"</cite>"
@@ -306,7 +306,7 @@ pageEncoding="UTF-8"%>
                         +"<a href='user/home.jsp' class='fly-avatar'>"
                         +"<img src='"+row.userTx+"' >"
                         +"</a>"
-                        +"<h2><a class='layui-badge'>动态</a> <a href='jie/detail.jsp' onclick=post('"+row.id+"')>"+row.postName+"</a></h2>"
+                        +"<h2><a class='layui-badge'>动态</a> <a href='jie/detail.jsp' onclick=post('"+row.id+"','"+row.postName+"','"+row.userId+"')>"+row.postName+"</a></h2>"
                         +"<div class='fly-list-info'>"
                         +"<a href='user/home.jsp' link>"
                         +"<cite>"+row.userName+"</cite>"
@@ -322,8 +322,35 @@ pageEncoding="UTF-8"%>
             }
         })
     })
-    function post(id) {
+    function post(id,postName,userId) {
         sessionStorage.setItem("postId",id);
+        sessionStorage.setItem("postName",postName);
+        sessionStorage.setItem("userId",userId);
     }
+    function  out() {
+        $.ajax({
+            url:'/out',
+            dataType:"json",
+        })
+    }
+    $(function () {
+        var red={};
+        red.userName="${sessionScope.user.userName}";
+        var target=$("#message");
+        if(red.userName==""){
+            target.html("");
+          var ste=
+                 "<li class='layui-nav-item'>"
+                +"<a class='iconfont icon-touxiang layui-hide-xs'href='login.jsp'></a>"
+                +"</li>"
+                +"<li class='layui-nav-item'>"
+                +"<a href='login.jsp'>登入</a>"
+                +"</li>"
+                +"<li class='layui-nav-item'>"
+                +"<a href='register.jsp'>注册</a>"
+                +"</li>";
+          target.append(ste);
+        }
+    })
 </script>
 </html>

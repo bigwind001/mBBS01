@@ -11,4 +11,6 @@ public class Reply {
     String reply;
     int id;
     int nid;
+    String postName;
+    String userId;
 }

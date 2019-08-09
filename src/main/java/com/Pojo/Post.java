@@ -13,4 +13,5 @@ public class Post {
     String content;
     int reply;
     Integer id;//自增
+    int userId;
 }

@@ -10,4 +10,6 @@ public interface UserService {
     User show(int userId);
     int postChange(int userId,String userName);
     int update(int userId,String pass);
+    int replySm(int userId);
+    int replyChange(int userId,String userName);
 }

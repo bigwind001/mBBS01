@@ -16,7 +16,7 @@
 
 <div class="fly-header layui-bg-black">
   <div class="layui-container">
-    <a class="fly-logo" href="/">
+    <a class="fly-logo" href="../BBSnr.jsp">
       <img src="../../res/images/logo.png" alt="layui">
     </a>
     
@@ -34,7 +34,7 @@
           <dd><a href="../user/message.jsp"><i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息</a></dd>
           <dd><a href="../user/home.jsp"><i class="layui-icon" style="margin-left: 2px; font-size: 22px;">&#xe68e;</i>我的主页</a></dd>
           <hr style="margin: 5px 0;">
-          <dd><a href="" style="text-align: center;">退出</a></dd>
+          <dd><a href="" onclick="out()" style="text-align: center;">退出</a></dd>
         </dl>
       </li>
     </ul>
@@ -88,7 +88,7 @@
     -->
     <div class="layui-tab layui-tab-brief" lay-filter="user">
       <ul class="layui-tab-title" id="LAY_mine">
-        <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖（<span>89</span>）</li>
+        <li data-type="mine-jie" lay-id="index" class="layui-this">我发的帖（<span>${sessionScope.replySm}</span>）</li>
         <%--<li data-type="collection" data-url="/collection/find/" lay-id="collection">我收藏的帖（<span>16</span>）</li>--%>
       </ul>
       <div class="layui-tab-content" style="padding: 20px 0;">
@@ -134,7 +134,7 @@ layui.config({
 <script>
   $(function(){
       var req={};
-      req.userId=${sessionScope.user.userId};
+      req.userId="${sessionScope.user.userId}";
       $.ajax({
           data:req,
           type:'Get',
@@ -147,7 +147,7 @@ layui.config({
               var str =
               <!--模板-->
               "<li>"
-              +"<a class='jie-title' href='../jie/detail.jsp' onclick=post('"+row.id+"') target='_blank'>"+row.postName+"</a>"
+              +"<a class='jie-title' href='../jie/detail.jsp' onclick=post('"+row.id+"','"+row.postName+"') target='_blank'>"+row.postName+"</a>"
               +"<i>"+row.time+"</i>"
               +"<a class='mine-edit' href=''>删除</a>"
               +"</li>";
@@ -158,8 +158,24 @@ layui.config({
 
 
   })
-  function post(id) {
+  function post(id,postName,userId) {
       sessionStorage.setItem("postId",id);
+      sessionStorage.setItem("postName",postName);
+      sessionStorage.setItem("userId",userId);
   }
+  function  out() {
+      $.ajax({
+          url:'/out',
+          dataType:"json",
+      })
+  }
+  $(function () {
+      var red={};
+      red.userName="${sessionScope.user.userName}";
+      if(red.userName==""){
+          alert("请先登陆");
+          window.location.href="../index.jsp";
+      }
+  })
 </script>
 </html>
