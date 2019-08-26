@@ -15,6 +15,7 @@ import java.util.List;
 
 @Controller
 public class PostController {
+//    测试GIT
     private double row=6.0;
     @Autowired
     PostService postService=null;
